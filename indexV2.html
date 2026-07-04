@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tom Kalscheuer — Ingénieur industriel / Data Engineer</title>
+<meta name="description" content="Portfolio de Tom Kalscheuer, ingénieur industriel (HELMo Gramme) en double diplôme Data Engineering à l'EPF Montpellier.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12151a;
+    --panel: #181c22;
+    --panel-2: #1d222a;
+    --border: #2a303a;
+    --text: #e7eaee;
+    --dim: #939aa4;
+    --faint: #5b6270;
+    --amber: #ffb454;
+    --amber-soft: rgba(255,180,84,0.12);
+    --maxw: 760px;
+    --radius: 10px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1, h2, h3{
+    font-family:'Space Grotesk', 'Inter', sans-serif;
+    margin:0;
+    color:#fff;
+  }
+
+  .mono{
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  a{color:var(--amber); text-decoration:none; border-bottom:1px solid transparent;}
+  a:hover{border-bottom-color:var(--amber);}
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:3px;
+    border-radius:3px;
+  }
+
+  ::selection{background:var(--amber); color:#20150a;}
+
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
+
+  /* ---------- nav ---------- */
+  header{
+    position:sticky; top:0; z-index:100;
+    background:rgba(18,21,26,0.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{
+    max-width:var(--maxw); margin:0 auto; padding:16px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:15px;
+    color:#fff;
+  }
+  .brand span{color:var(--amber);}
+  nav ul{
+    display:flex; gap:24px; list-style:none;
+    margin:0; padding:0;
+  }
+  nav a{
+    color:var(--dim); font-size:14px; border-bottom:none;
+  }
+  nav a:hover{color:var(--text);}
+  @media (max-width:600px){
+    nav ul{gap:14px;}
+    nav a{font-size:13px;}
+  }
+
+  section{
+    padding:64px 0;
+    border-bottom:1px solid var(--border);
+  }
+  section:last-of-type{border-bottom:none;}
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--amber);
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:10px;
+    display:block;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{padding-top:72px;}
+  .hero h1{
+    font-size:clamp(30px, 5vw, 44px);
+    line-height:1.15;
+    margin-bottom:10px;
+  }
+  .hero .role{
+    color:var(--dim);
+    font-size:17px;
+    margin-bottom:22px;
+  }
+  .hero .lede{
+    color:var(--dim);
+    max-width:56ch;
+    margin-bottom:28px;
+    font-size:15.5px;
+  }
+  .badges{display:flex; flex-wrap:wrap; gap:8px;}
+  .badge{
+    font-size:12.5px;
+    padding:6px 12px;
+    border:1px solid var(--border);
+    border-radius:20px;
+    color:var(--dim);
+    background:var(--panel);
+  }
+  .badge.highlight{
+    color:var(--amber);
+    border-color:rgba(255,180,84,0.35);
+    background:var(--amber-soft);
+  }
+
+  /* ---------- about ---------- */
+  h2{font-size:24px; margin-bottom:20px;}
+  .about p{
+    color:var(--dim);
+    max-width:64ch;
+    margin:0 0 14px;
+    font-size:15.5px;
+  }
+  .about strong{color:var(--text); font-weight:600;}
+
+  /* ---------- education ---------- */
+  .edu-item{
+    display:flex; gap:20px;
+    padding:20px 0;
+    border-top:1px solid var(--border);
+  }
+  .edu-item:first-of-type{border-top:none; padding-top:0;}
+  .edu-date{
+    flex-shrink:0;
+    width:100px;
+    color:var(--faint);
+    font-size:13px;
+    font-family:'IBM Plex Mono', monospace;
+    padding-top:2px;
+  }
+  .edu-content h3{font-size:16px; margin-bottom:5px; color:#fff;}
+  .edu-content p{color:var(--dim); font-size:14.5px; margin:0 0 8px;}
+  .tag-pill{
+    display:inline-block;
+    font-size:11.5px;
+    color:var(--amber);
+    background:var(--amber-soft);
+    padding:3px 10px;
+    border-radius:12px;
+  }
+  @media (max-width:560px){
+    .edu-item{flex-direction:column; gap:6px;}
+    .edu-date{width:auto;}
+  }
+
+  /* ---------- skills ---------- */
+  .skill-group{margin-bottom:24px;}
+  .skill-group:last-child{margin-bottom:0;}
+  .skill-group-title{
+    color:var(--dim); font-size:13px;
+    text-transform:uppercase; letter-spacing:.04em;
+    margin-bottom:12px;
+  }
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    font-size:13.5px;
+    padding:7px 14px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:8px;
+    color:var(--text);
+  }
+
+  /* ---------- projects ---------- */
+  .projects{display:flex; flex-direction:column; gap:16px;}
+  .project{
+    border:1px solid var(--border);
+    background:var(--panel);
+    border-radius:var(--radius);
+    padding:22px 24px;
+    transition:border-color .15s ease;
+  }
+  .project:hover{border-color:#3a4250;}
+  .project-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    gap:12px; flex-wrap:wrap;
+    margin-bottom:8px;
+  }
+  .project-name{color:#fff; font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:17px;}
+  .project-status{
+    font-size:12px; color:var(--faint);
+    font-family:'IBM Plex Mono', monospace;
+  }
+  .project-desc{color:var(--dim); font-size:14.5px; margin:0 0 14px;}
+  .project-stack{display:flex; flex-wrap:wrap; gap:6px;}
+  .project-stack span{
+    font-size:11.5px; color:var(--dim);
+    border:1px solid var(--border);
+    padding:3px 9px; border-radius:6px;
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  /* ---------- contact ---------- */
+  .contact-box{
+    display:flex; flex-wrap:wrap; gap:14px;
+  }
+  .contact-link{
+    display:flex; align-items:center; gap:10px;
+    padding:14px 18px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    border-radius:var(--radius);
+    color:var(--text);
+    font-size:14.5px;
+    border-bottom:1px solid var(--border);
+    flex:1 1 220px;
+  }
+  .contact-link:hover{border-color:var(--amber); border-bottom-color:var(--amber);}
+  .contact-link .k{color:var(--faint); font-family:'IBM Plex Mono', monospace; font-size:11.5px; text-transform:uppercase;}
+
+  footer{
+    padding:32px 0 56px;
+    color:var(--faint);
+    font-size:13px;
+    text-align:center;
+  }
+
+  /* subtle scroll-reveal, respects reduced motion */
+  .reveal{
+    opacity:0; transform:translateY(14px);
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .reveal.in{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1; transform:none; transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <div class="brand">tom<span>.</span>kalscheuer</div>
+    <nav>
+      <ul>
+        <li><a href="#about">À propos</a></li>
+        <li><a href="#education">Parcours</a></li>
+        <li><a href="#projects">Projets</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero">
+    <span class="eyebrow">Portfolio</span>
+    <h1>Tom Kalscheuer</h1>
+    <p class="role">Ingénieur industriel · Data Engineer en devenir</p>
+    <p class="lede">Bachelier en sciences de l'ingénieur industriel obtenu à HELMo Gramme avec mention Distinction. En route vers un double diplôme Master Data Engineering avec l'EPF Montpellier.</p>
+    <div class="badges">
+      <span class="badge highlight">Distinction — HELMo Gramme 2026</span>
+      <span class="badge">Double diplôme EPF Montpellier</span>
+      <span class="badge">Bassenge, Belgique</span>
+    </div>
+  </section>
+
+  <section id="about" class="reveal">
+    <span class="eyebrow">À propos</span>
+    <h2>Qui je suis</h2>
+    <div class="about">
+      <p>Je viens de terminer mon bachelier en sciences de l'ingénieur industriel à HELMo Gramme (Liège), avec <strong>mention Distinction</strong>. Trois ans à jongler entre thermique, électronique analogique, calcul de structures, télécoms et développement C# — avec un fil rouge : comprendre comment les systèmes se comportent, qu'ils soient physiques ou logiciels.</p>
+      <p>À la rentrée, je pars sur un double diplôme avec l'<strong>EPF Montpellier</strong> pour me spécialiser en Data Engineering. L'idée : garder la rigueur d'ingénieur généraliste et l'orienter vers la donnée — pipelines, structuration, modèles.</p>
+      <p>En dehors des cours, je code des projets perso en C# et j'apprends le développement iOS en Swift. Adepte Apple, joueur de tennis occasionnel, et globalement du genre à vouloir comprendre comment un truc marche avant de l'utiliser.</p>
+    </div>
+  </section>
+
+  <section id="education" class="reveal">
+    <span class="eyebrow">Parcours</span>
+    <h2>Formation</h2>
+
+    <div class="edu-item">
+      <div class="edu-date">2023 — 2026</div>
+      <div class="edu-content">
+        <h3>HELMo Gramme — Haute École Libre Mosane, Liège</h3>
+        <p>Bachelier en sciences de l'Ingénieur industriel. Thermique &amp; transferts de chaleur (FDM/FVM), électronique analogique, calcul de structures (Eurocode), télécommunications, conversion d'énergie, développement C# / WinForms.</p>
+        <span class="tag-pill">Mention Distinction</span>
+      </div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-date">2025</div>
+      <div class="edu-content">
+        <h3>Projet TRIIP — Safran Aero Boosters</h3>
+        <p>Collaboration industrielle sur l'optimisation de l'assemblage de pales de compresseur ("Predict-to-Fit"). Rapport client final et outils TRIZ (DTC, Fonction Inverse, Asknature).</p>
+      </div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-date">2026 — 2029</div>
+      <div class="edu-content">
+        <h3>EPF Montpellier — Double diplôme HELMo Gramme × EPF</h3>
+        <p>Master Ingénieur Généraliste, spécialisation Data Engineering. Structuration de données, machine learning, approche systémique coût/bénéfice.</p>
+        <span class="tag-pill">En cours</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="reveal">
+    <span class="eyebrow">Compétences</span>
+    <h2>Ce que je manie</h2>
+
+    <div class="skill-group">
+      <div class="skill-group-title">Dev &amp; data</div>
+      <div class="chips">
+        <span class="chip">C#</span>
+        <span class="chip">Python</span>
+        <span class="chip">SQL</span>
+        <span class="chip">Git</span>
+        <span class="chip">Swift / SwiftUI</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-title">Ingénierie</div>
+      <div class="chips">
+        <span class="chip">Simulation thermique (FDM/FVM)</span>
+        <span class="chip">Électronique analogique</span>
+        <span class="chip">Méthodes numériques</span>
+        <span class="chip">Calcul de structures</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="reveal">
+    <span class="eyebrow">Projets</span>
+    <h2>Ce que j'ai construit</h2>
+    <div class="projects">
+
+      <div class="project">
+        <div class="project-head">
+          <span class="project-name">Last Hand</span>
+          <span class="project-status">Migration en cours</span>
+        </div>
+        <p class="project-desc">Jeu de rôle sur base de cartes, développé en C# WinForms. Migration en cours vers Unity pour passer à un vrai moteur de jeu.</p>
+        <div class="project-stack"><span>C#</span><span>WinForms</span><span>Unity</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-head">
+          <span class="project-name">GamesHub</span>
+          <span class="project-status">Terminé</span>
+        </div>
+        <p class="project-desc">Jeu de memory en C# WinForms avec base SQLite. Suffisamment abouti pour obtenir une dispense d'oral au cours de Computer Science 2.</p>
+        <div class="project-stack"><span>C#</span><span>WinForms</span><span>SQLite</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-head">
+          <span class="project-name">TRIIP — Safran Aero Boosters</span>
+          <span class="project-status">Terminé — 2025</span>
+        </div>
+        <p class="project-desc">Projet industriel : optimisation de l'assemblage de pales de compresseur ("Predict-to-Fit"). Rapport client et sections TRIZ (DTC, Fonction Inverse, Asknature).</p>
+        <div class="project-stack"><span>TRIZ</span><span>Ingénierie industrielle</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-head">
+          <span class="project-name">Tennis Tracker</span>
+          <span class="project-status">En développement</span>
+        </div>
+        <p class="project-desc">Application de suivi de matchs de tennis en SwiftUI, premier module d'une appli multi-sports. Projet perso pour apprendre l'écosystème iOS.</p>
+        <div class="project-stack"><span>Swift</span><span>SwiftUI</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="contact" class="reveal">
+    <span class="eyebrow">Contact</span>
+    <h2>Me contacter</h2>
+    <div class="contact-box">
+      <a class="contact-link" href="mailto:contact@kalscheuer.be">
+        <span class="k">Email</span>
+        <span>contact@kalscheuer.be</span>
+      </a>
+      <a class="contact-link" href="https://github.com/" target="_blank" rel="noopener">
+        <span class="k">GitHub</span>
+        <span>github.com/ton-pseudo</span>
+      </a>
+      <a class="contact-link" href="https://linkedin.com/" target="_blank" rel="noopener">
+        <span class="k">LinkedIn</span>
+        <span>linkedin.com/in/ton-profil</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">kalscheuer.be</div>
+</footer>
+
+<script>
+  // Simple scroll reveal, respects reduced motion
+  (function(){
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var items = document.querySelectorAll('.reveal');
+    if(prefersReduced){
+      items.forEach(function(el){ el.classList.add('in'); });
+      return;
+    }
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.15});
+    items.forEach(function(el){ obs.observe(el); });
+  })();
+</script>
+
+</body>
+</html>
