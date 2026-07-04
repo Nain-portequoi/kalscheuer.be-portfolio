@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tom Kalscheuer — Ingénieur industriel / Data Engineer</title>
+<meta name="description" content="Portfolio de Tom Kalscheuer, ingénieur industriel (HELMo Gramme) en double diplôme Data Engineering à l'EPF Montpellier.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0d10;
+    --bg-panel: #10151a;
+    --bg-panel-2: #0d1216;
+    --border: #232b32;
+    --border-soft: #1a2027;
+    --text: #d8e0e6;
+    --text-dim: #6b7680;
+    --text-faint: #454e56;
+    --amber: #ffb454;
+    --amber-dim: #8a6a3d;
+    --cyan: #6fd3c7;
+    --red: #ff6b6b;
+    --radius: 3px;
+    --maxw: 780px;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+    font-size:15px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* subtle scanline atmosphere — very low opacity, not the whole show */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    pointer-events:none;
+    background:repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.012) 0px,
+      rgba(255,255,255,0.012) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    z-index:9999;
+  }
+
+  a{color:var(--cyan); text-decoration:none; border-bottom:1px solid rgba(111,211,199,0.35);}
+  a:hover{border-bottom-color:var(--cyan);}
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:2px;
+  }
+
+  ::selection{background:var(--amber); color:#1a1206;}
+
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
+
+  /* ---------- boot sequence ---------- */
+  #boot{
+    position:fixed; inset:0;
+    background:var(--bg);
+    color:var(--amber);
+    z-index:10000;
+    padding:8vh 24px 0;
+    font-size:14px;
+    white-space:pre-wrap;
+  }
+  #boot .cursor-line::after{
+    content:"█";
+    animation:blink 1s step-end infinite;
+    margin-left:2px;
+  }
+  #boot.hide{display:none;}
+  @media (prefers-reduced-motion: reduce){
+    #boot{display:none;}
+  }
+
+  @keyframes blink{
+    50%{opacity:0;}
+  }
+
+  /* ---------- top window chrome ---------- */
+  .termbar{
+    position:sticky; top:0; z-index:100;
+    background:var(--bg-panel);
+    border-bottom:1px solid var(--border);
+  }
+  .termbar-inner{
+    max-width:var(--maxw); margin:0 auto; padding:10px 24px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .dots{display:flex; gap:6px; flex-shrink:0;}
+  .dots span{width:9px; height:9px; border-radius:50%; display:inline-block;}
+  .dots span:nth-child(1){background:#5b5f66;}
+  .dots span:nth-child(2){background:#5b5f66;}
+  .dots span:nth-child(3){background:#5b5f66;}
+  .termbar-title{
+    color:var(--text-dim);
+    font-size:12.5px;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .termbar nav{
+    margin-left:auto;
+    display:flex; gap:16px;
+    font-size:12.5px;
+  }
+  .termbar nav a{
+    color:var(--text-dim);
+    border-bottom:none;
+    white-space:nowrap;
+  }
+  .termbar nav a:hover{color:var(--amber);}
+  .termbar nav a::before{content:"./"; color:var(--text-faint);}
+  @media (max-width:600px){
+    .termbar nav{display:none;}
+  }
+
+  /* ---------- prompt / section headers ---------- */
+  .prompt{
+    display:flex; align-items:baseline; gap:10px;
+    margin:0 0 18px;
+    color:var(--text-dim);
+    font-size:13.5px;
+  }
+  .prompt .user{color:var(--cyan);}
+  .prompt .at{color:var(--text-faint);}
+  .prompt .path{color:var(--amber);}
+  .prompt .cmd{color:var(--text);}
+  .prompt .cmd::after{
+    content:"";
+    display:inline-block;
+    width:7px; height:14px;
+    background:var(--amber);
+    margin-left:6px;
+    vertical-align:-2px;
+    animation:blink 1.1s step-end infinite;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .prompt .cmd::after{animation:none; opacity:.6;}
+  }
+
+  section{
+    padding:56px 0;
+    border-bottom:1px dashed var(--border-soft);
+  }
+  section:last-of-type{border-bottom:none;}
+
+  /* ---------- hero ---------- */
+  .hero{padding-top:72px;}
+  .hero h1{
+    font-size:clamp(28px, 5.5vw, 42px);
+    margin:0 0 6px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    color:#fff;
+  }
+  .hero .role{
+    color:var(--amber);
+    font-size:15px;
+    margin:0 0 22px;
+  }
+  .hero .role .sep{color:var(--text-faint); margin:0 8px;}
+  .hero p.lede{
+    color:var(--text-dim);
+    max-width:58ch;
+    margin:0 0 28px;
+  }
+  .badges{display:flex; flex-wrap:wrap; gap:8px;}
+  .badge{
+    font-size:11.5px;
+    padding:5px 10px;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    color:var(--text-dim);
+    background:var(--bg-panel);
+  }
+  .badge.new{
+    color:var(--amber);
+    border-color:var(--amber-dim);
+  }
+  .badge.new::before{content:"● "; font-size:8px; vertical-align:2px;}
+
+  /* ---------- about ---------- */
+  .about-body{color:var(--text); max-width:64ch;}
+  .about-body p{margin:0 0 14px;}
+  .about-body .tag{color:var(--cyan);}
+
+  /* ---------- education log ---------- */
+  .log{border-left:2px solid var(--border); padding-left:0; list-style:none; margin:0; padding:0;}
+  .log-entry{
+    position:relative;
+    padding:0 0 26px 26px;
+    border-left:2px solid var(--border-soft);
+    margin-left:6px;
+  }
+  .log-entry:last-child{padding-bottom:0;}
+  .log-entry::before{
+    content:"";
+    position:absolute; left:-6px; top:4px;
+    width:10px; height:10px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--text-faint);
+  }
+  .log-entry.current::before{
+    border-color:var(--amber);
+    background:var(--amber);
+    box-shadow:0 0 0 3px rgba(255,180,84,0.15);
+  }
+  .log-ts{
+    color:var(--text-faint); font-size:12px;
+  }
+  .log-title{color:#fff; font-weight:600; margin:2px 0 4px;}
+  .log-detail{color:var(--text-dim); font-size:13.5px; margin:0 0 6px;}
+  .log-tag{
+    display:inline-block;
+    font-size:11px;
+    color:var(--amber);
+    border:1px solid var(--amber-dim);
+    padding:1px 7px;
+    border-radius:var(--radius);
+    margin-top:4px;
+  }
+
+  /* ---------- htop skills ---------- */
+  .htop-head{
+    display:flex; justify-content:space-between;
+    color:var(--text-faint); font-size:11px;
+    padding:0 0 8px;
+    border-bottom:1px solid var(--border-soft);
+    margin-bottom:10px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+  }
+  .proc{
+    display:grid;
+    grid-template-columns:1fr 46px;
+    align-items:center;
+    gap:14px;
+    padding:9px 0;
+  }
+  .proc-name{font-size:13.5px; color:var(--text);}
+  .proc-name .pid{color:var(--text-faint); margin-right:8px;}
+  .proc-bar-row{grid-column:1 / -1; margin-top:4px;}
+  .proc-bar-track{
+    height:6px; background:var(--bg-panel-2);
+    border:1px solid var(--border-soft);
+    border-radius:2px; overflow:hidden;
+  }
+  .proc-bar-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--amber-dim), var(--amber));
+  }
+  .proc-pct{color:var(--text-dim); font-size:12px; text-align:right;}
+  .proc-group{margin-bottom:28px;}
+  .proc-group-label{
+    color:var(--cyan); font-size:12px; margin-bottom:6px;
+    text-transform:uppercase; letter-spacing:.04em;
+  }
+
+  /* ---------- projects ---------- */
+  .dirlisting{color:var(--text-faint); font-size:12px; margin-bottom:22px;}
+  .projects{display:flex; flex-direction:column; gap:14px;}
+  .project{
+    border:1px solid var(--border);
+    background:var(--bg-panel);
+    border-radius:var(--radius);
+    padding:18px 20px;
+  }
+  .project-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    gap:12px; flex-wrap:wrap;
+    margin-bottom:6px;
+  }
+  .project-name{color:#fff; font-weight:600; font-size:15px;}
+  .project-name::before{content:"drwxr-xr-x  "; color:var(--text-faint); font-weight:400;}
+  .project-status{font-size:11px; color:var(--text-faint);}
+  .project-desc{color:var(--text-dim); font-size:13.5px; margin:0 0 10px;}
+  .project-stack{display:flex; flex-wrap:wrap; gap:6px;}
+  .project-stack span{
+    font-size:11px; color:var(--cyan);
+    border:1px solid rgba(111,211,199,0.25);
+    padding:2px 8px; border-radius:var(--radius);
+  }
+
+  /* ---------- contact ---------- */
+  .contact-box{
+    border:1px solid var(--border);
+    background:var(--bg-panel);
+    padding:22px;
+    border-radius:var(--radius);
+  }
+  .contact-row{
+    display:flex; gap:10px; padding:6px 0;
+    font-size:13.5px;
+    flex-wrap:wrap;
+  }
+  .contact-row .k{color:var(--text-faint); width:80px; flex-shrink:0;}
+  .contact-row .v{color:var(--text);}
+
+  footer{
+    padding:32px 0 60px;
+    color:var(--text-faint);
+    font-size:12px;
+    text-align:center;
+  }
+  footer .uptime{color:var(--text-dim);}
+
+  h2.prompt-cmd{margin:0; font-size:inherit;}
+
+  @media (max-width:600px){
+    section{padding:40px 0;}
+    .hero{padding-top:48px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="boot" aria-hidden="true"></div>
+
+<div class="termbar">
+  <div class="termbar-inner">
+    <div class="dots"><span></span><span></span><span></span></div>
+    <div class="termbar-title">tom@kalscheuer:~$ session — kalscheuer.be</div>
+    <nav>
+      <a href="#about">about</a>
+      <a href="#education">education</a>
+      <a href="#skills">skills</a>
+      <a href="#projects">projects</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section class="hero" id="top">
+    <p class="prompt"><span class="user">tom</span><span class="at">@</span><span class="path">kalscheuer</span><span class="cmd">:~$ whoami</span></p>
+    <h1>Tom Kalscheuer</h1>
+    <p class="role">Ingénieur industriel<span class="sep">·</span>Data Engineer en devenir<span class="sep">·</span>Liège / Montpellier</p>
+    <p class="lede">Bachelier en sciences de l'ingénieur industriel (HELMo Gramme, mention Distinction). En route vers un double diplôme Master Data Engineering avec l'EPF Montpellier. J'aime les systèmes qui tiennent debout — que ce soit du code, un modèle thermique ou une carte électronique.</p>
+    <div class="badges">
+      <span class="badge new">Distinction — HELMo Gramme 2026</span>
+      <span class="badge">Double diplôme EPF Montpellier — en cours</span>
+      <span class="badge">Bassenge, Belgique</span>
+    </div>
+  </section>
+
+  <section id="about">
+    <p class="prompt"><span class="user">tom</span><span class="at">@</span><span class="path">kalscheuer</span><span class="cmd">:~$ cat about.txt</span></p>
+    <div class="about-body">
+      <p>Je viens de terminer mon bachelier en sciences de l'ingénieur industriel à HELMo Gramme (Liège), avec mention <span class="tag">Distinction</span>. Trois ans à jongler entre thermique, électronique analogique, calcul de structures, télécoms et développement <span class="tag">C#</span> — avec un fil rouge : comprendre comment les systèmes se comportent, qu'ils soient physiques ou logiciels.</p>
+      <p>À la rentrée, je pars sur un double diplôme avec l'<span class="tag">EPF Montpellier</span> pour me spécialiser en Data Engineering. L'idée : garder la rigueur d'ingénieur généraliste et l'orienter vers la donnée — pipelines, structuration, modèles.</p>
+      <p>En dehors des cours, je code des projets perso en C# et j'apprends actuellement Swift/SwiftUI. Adepte Apple, joueur de tennis occasionnel, et globalement du genre à vouloir comprendre comment un truc marche avant de l'utiliser.</p>
+    </div>
+  </section>
+
+  <section id="education">
+    <p class="prompt"><span class="user">tom</span><span class="at">@</span><span class="path">kalscheuer</span><span class="cmd">:~$ tail -f education.log</span></p>
+    <ul class="log">
+      <li class="log-entry">
+        <div class="log-ts">2023 — 2026</div>
+        <div class="log-title">HELMo Gramme — Haute École Libre Mosane, Liège</div>
+        <div class="log-detail">Bachelier en sciences de l'Ingénieur industriel. Thermique &amp; transferts de chaleur (FDM/FVM), électronique analogique, calcul de structures (Eurocode), télécommunications, conversion d'énergie, développement C# / WinForms.</div>
+        <span class="log-tag">Mention Distinction</span>
+      </li>
+      <li class="log-entry">
+        <div class="log-ts">2025</div>
+        <div class="log-title">Projet TRIIP — Safran Aero Boosters</div>
+        <div class="log-detail">Collaboration industrielle sur l'optimisation de l'assemblage de pales de compresseur ("Predict-to-Fit"). Rapport client final et outils TRIZ (DTC, Fonction Inverse, Asknature).</div>
+      </li>
+      <li class="log-entry current">
+        <div class="log-ts">2026 — 2029 (prévu)</div>
+        <div class="log-title">EPF Montpellier — Double diplôme HELMo Gramme × EPF</div>
+        <div class="log-detail">Master Ingénieur Généraliste, spécialisation Data Engineering. Structuration de données, machine learning, approche systémique coût/bénéfice.</div>
+        <span class="log-tag">en cours</span>
+      </li>
+    </ul>
+  </section>
+
+  <section id="skills">
+    <p class="prompt"><span class="user">tom</span><span class="at">@</span><span class="path">kalscheuer</span><span class="cmd">:~$ htop</span></p>
+
+    <div class="proc-group">
+      <div class="proc-group-label">Dev &amp; data</div>
+      <div class="htop-head"><span>PROCESS</span><span>USE%</span></div>
+
+      <div class="proc">
+        <div class="proc-name"><span class="pid">01</span>C#</div>
+        <div class="proc-pct">90%</div>
+        <div class="proc-bar-row"><div class="proc-bar-track"><div class="proc-bar-fill" style="width:90%"></div></div></div>
+      </div>
+      <div class="proc">
+        <div class="proc-name"><span class="pid">02</span>Python</div>
+        <div class="proc-pct">80%</div>
+        <div class="proc-bar-row"><div class="proc-bar-track"><div class="proc-bar-fill" style="width:80%"></div></div></div>
+      </div>
+      <div class="proc">
+        <div class="proc-name"><span class="pid">03</span>SQL</div>
+        <div class="proc-pct">70%</div>
+        <div class="proc-bar-row"><div class="proc-bar-track"><div class="proc-bar-fill" style="width:70%"></div></div></div>
+      </div>
+      <div class="proc">
+        <div class="proc-name"><span class="pid">04</span>Git</div>
+        <div class="proc-pct">75%</div>
+        <div class="proc-bar-row"><div class="proc-bar-track"><div class="proc-bar-fill" style="width:75%"></div></div></div>
+      </div>
+      <div class="proc">
+        <div class="proc-name"><span class="pid">05</span>Swift / SwiftUI</div>
+        <div class="proc-pct">40%</div>
+        <div class="proc-bar-row"><div class="proc-bar-track"><div class="proc-bar-fill" style="width:40%"></div></div></div>
+      </div>
+    </div>
+
+    <div class="proc-group">
+      <div class="proc-group-label">Ingénierie</div>
+      <div class="htop-head"><span>PROCESS</span><span>USE%</span></div>
+
+      <div class="proc">
+        <div class="proc-name"><span class="pid">06</span>Simulation thermique (FDM/FVM)</div>
+        <div class="proc-pct">85%</div>
+        <div class="proc-bar-row"><div class="proc-bar-track"><div class="proc-bar-fill" style="width:85%"></div></div></div>
+      </div>
+      <div class="proc">
+        <div class="proc-name"><span class="pid">07</span>Électronique analogique</div>
+        <div class="proc-pct">75%</div>
+        <div class="proc-bar-row"><div class="proc-bar-track"><div class="proc-bar-fill" style="width:75%"></div></div></div>
+      </div>
+      <div class="proc">
+        <div class="proc-name"><span class="pid">08</span>Méthodes numériques</div>
+        <div class="proc-pct">80%</div>
+        <div class="proc-bar-row"><div class="proc-bar-track"><div class="proc-bar-fill" style="width:80%"></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <p class="prompt"><span class="user">tom</span><span class="at">@</span><span class="path">kalscheuer</span><span class="cmd">:~$ ls -la projects/</span></p>
+    <div class="dirlisting">total 4 — drwxr-xr-x tom tom 4096</div>
+    <div class="projects">
+
+      <div class="project">
+        <div class="project-head">
+          <span class="project-name">last-hand</span>
+          <span class="project-status">actif — migration en cours</span>
+        </div>
+        <p class="project-desc">Jeu de rôle sur base de cartes, développé en C# WinForms. Migration en cours vers Unity (mouvement 2D avec Rigidbody2D) pour passer à un vrai moteur de jeu.</p>
+        <div class="project-stack"><span>C#</span><span>WinForms</span><span>Unity</span><span>Rigidbody2D</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-head">
+          <span class="project-name">gameshub</span>
+          <span class="project-status">terminé</span>
+        </div>
+        <p class="project-desc">Jeu de memory en C# WinForms avec base SQLite. Projet remis dans le cadre du cours de Computer Science 2 — suffisamment abouti pour obtenir une dispense d'oral.</p>
+        <div class="project-stack"><span>C#</span><span>WinForms</span><span>SQLite</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-head">
+          <span class="project-name">triip-safran</span>
+          <span class="project-status">terminé — 2025</span>
+        </div>
+        <p class="project-desc">Projet industriel avec Safran Aero Boosters : optimisation de l'assemblage de pales de compresseur ("Predict-to-Fit"). Rapport client et sections TRIZ (DTC, Fonction Inverse, Asknature).</p>
+        <div class="project-stack"><span>TRIZ</span><span>Ingénierie industrielle</span><span>Rapport client</span></div>
+      </div>
+
+      <div class="project">
+        <div class="project-head">
+          <span class="project-name">tennis-tracker</span>
+          <span class="project-status">en développement</span>
+        </div>
+        <p class="project-desc">Application de suivi de matchs de tennis en SwiftUI, premier module d'une appli multi-sports. Projet perso pour apprendre l'écosystème iOS en venant d'un background C#.</p>
+        <div class="project-stack"><span>Swift</span><span>SwiftUI</span><span>Xcode</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="contact">
+    <p class="prompt"><span class="user">tom</span><span class="at">@</span><span class="path">kalscheuer</span><span class="cmd">:~$ cat contact.txt</span></p>
+    <div class="contact-box">
+      <div class="contact-row"><span class="k">email</span><span class="v"><a href="mailto:contact@kalscheuer.be">contact@kalscheuer.be</a></span></div>
+      <div class="contact-row"><span class="k">github</span><span class="v"><a href="https://github.com/">github.com/ton-pseudo</a></span></div>
+      <div class="contact-row"><span class="k">linkedin</span><span class="v"><a href="https://linkedin.com/">linkedin.com/in/ton-profil</a></span></div>
+      <div class="contact-row"><span class="k">localisation</span><span class="v">Bassenge, Belgique</span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="uptime" id="uptime"></span>
+    <div style="margin-top:6px;">kalscheuer.be — build en cours, comme le reste.</div>
+  </div>
+</footer>
+
+<script>
+  // Boot sequence — respects reduced motion
+  (function(){
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var boot = document.getElementById('boot');
+    if(prefersReduced){
+      boot.remove();
+      return;
+    }
+    var lines = [
+      'Booting kalscheuer.be ...',
+      '[  OK  ] Mounting /home/tom',
+      '[  OK  ] Loading kernel module: industrial_engineering.ko',
+      '[  OK  ] Loading kernel module: data_engineering.ko (beta)',
+      '[  OK  ] Starting cv.service',
+      '[  OK  ] Starting projects.service',
+      'tom@kalscheuer:~$ '
+    ];
+    var i = 0, char = 0;
+    var content = '';
+    function typeLine(){
+      if(i >= lines.length){
+        setTimeout(function(){
+          boot.classList.add('hide');
+        }, 350);
+        return;
+      }
+      var line = lines[i];
+      if(char <= line.length){
+        boot.textContent = content + line.slice(0, char) + '\n';
+        boot.classList.add('cursor-line');
+        char++;
+        setTimeout(typeLine, i === lines.length - 1 ? 28 : 14);
+      } else {
+        content += line + '\n';
+        i++;
+        char = 0;
+        setTimeout(typeLine, 90);
+      }
+    }
+    typeLine();
+  })();
+
+  // Uptime counter since bachelor confirmation date
+  (function(){
+    var start = new Date('2026-07-02T00:00:00');
+    var el = document.getElementById('uptime');
+    function tick(){
+      var diff = Math.floor((Date.now() - start.getTime()) / 1000);
+      var d = Math.floor(diff / 86400);
+      var h = Math.floor((diff % 86400) / 3600);
+      var m = Math.floor((diff % 3600) / 60);
+      var s = diff % 60;
+      el.textContent = 'uptime (post-bachelier): ' + d + 'j ' + h + 'h ' + m + 'm ' + s + 's';
+    }
+    tick();
+    setInterval(tick, 1000);
+  })();
+</script>
+
+</body>
+</html>
